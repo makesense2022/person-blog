@@ -1,6 +1,6 @@
 import "server-only";
 
-import { list, put } from "@vercel/blob";
+import { list, put, getDownloadUrl } from "@vercel/blob";
 import fs from "node:fs/promises";
 import path from "node:path";
 
@@ -84,7 +84,7 @@ async function blobPosts() {
   const { blobs } = await list({ prefix: "posts/" });
   const posts = await Promise.all(
     blobs.filter((blob) => blob.pathname.endsWith(".md")).map(async (blob) => {
-      const source = await fetch(blob.url).then((response) => response.text());
+      const source = await fetch(getDownloadUrl(blob.url)).then((response) => response.text());
       return parsePost(source, blob.pathname.replace(/^posts\//, "").replace(/\.md$/, ""));
     }),
   );
@@ -107,7 +107,10 @@ export async function savePost(input: PostInput) {
   const slug = slugify(input.slug || input.title);
   const source = serializePost(input);
   if (blobEnabled()) {
-    await put(`posts/${slug}.md`, source, { access: "public", addRandomSuffix: false, allowOverwrite: true });
+    // 草稿用 private 访问:URL 不可直接读取,只能通过服务端 getDownloadUrl 签名 URL 访问;
+    // 正式文章保持 public,便于公开页面与 RSS 读取。
+    const access = input.published ? "public" : "private";
+    await put(`posts/${slug}.md`, source, { access, addRandomSuffix: false, allowOverwrite: true });
   } else {
     await fs.mkdir(contentDir, { recursive: true });
     await fs.writeFile(path.join(contentDir, `${slug}.md`), source, "utf8");
