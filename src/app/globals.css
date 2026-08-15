@@ -138,7 +138,7 @@ h1 em, h2 em { color: var(--terra); font-style: italic; }
 .search-result-count { margin-bottom: 40px; color: var(--muted); font-size: 13px; }
 
 /* ---------- 后台编辑 ---------- */
-.admin-page { padding: 80px 0 120px; }
+.admin-page { width: min(100% - 96px, 1340px); margin: 0 auto; padding: 80px 0 120px; }
 .editor-shell { display: grid; grid-template-columns: .75fr 1.25fr; gap: 62px; }
 .editor-intro { position: sticky; top: 35px; align-self: start; }
 .editor-intro h1 { margin: 0 0 22px; color: var(--ink); font-size: clamp(2.2rem, 4vw, 3.4rem); line-height: 1.05; letter-spacing: -.05em; }
@@ -195,6 +195,7 @@ h1 em, h2 em { color: var(--terra); font-style: italic; }
   .about-section { grid-template-columns: .55fr 2fr; }
   .about-contact { grid-column: 2; justify-self: start; margin-top: -25px; }
   .notes-section { width: min(100% - 64px, 1100px); }
+  .admin-page { width: min(100% - 64px, 1100px); }
   .articles-section { padding-right: 32px; padding-left: 32px; }
 }
 @media (max-width: 700px) {
@@ -223,6 +224,7 @@ h1 em, h2 em { color: var(--terra); font-style: italic; }
   .article .post-meta { margin-top: 38px; }
   .prose { font-size: 17px; }
   .narrow-page, .search-page { padding: 75px 0; }
+  .admin-page { width: min(100% - 40px, 520px); }
   .editor-shell { grid-template-columns: 1fr; gap: 35px; }
   .editor-intro { position: static; }
   .editor-form { padding: 21px; }
