@@ -12,6 +12,8 @@ export type Post = {
   tags: string[];
   published: boolean;
   content: string;
+  /** 若来自知乎等外部平台,指向原文 URL;文章详情会以 canonical 引用并引导阅读原文 */
+  externalUrl?: string;
 };
 
 type PostInput = Omit<Post, "slug"> & { slug?: string };
@@ -49,6 +51,7 @@ export function parsePost(source: string, slug: string): Post {
     .filter(Boolean);
   const content = match ? match[2].trim() : source.trim();
   const firstLine = content.split("\n").find((line) => line.trim())?.replace(/^#+\s*/, "") || "未命名文章";
+  const externalUrlRaw = parseScalar(fields.externalUrl || "");
   return {
     slug,
     title: parseScalar(fields.title || firstLine),
@@ -57,12 +60,14 @@ export function parsePost(source: string, slug: string): Post {
     tags,
     published: fields.published !== "false",
     content,
+    externalUrl: externalUrlRaw.startsWith("http") ? externalUrlRaw : undefined,
   };
 }
 
 export function serializePost(post: PostInput) {
   const tags = post.tags.map((tag) => JSON.stringify(tag)).join(", ");
-  return `---\ntitle: ${JSON.stringify(post.title)}\ndescription: ${JSON.stringify(post.description)}\ndate: ${JSON.stringify(post.date)}\ntags: [${tags}]\npublished: ${post.published}\n---\n\n${post.content.trim()}\n`;
+  const external = post.externalUrl ? `externalUrl: ${JSON.stringify(post.externalUrl)}\n` : "";
+  return `---\ntitle: ${JSON.stringify(post.title)}\ndescription: ${JSON.stringify(post.description)}\ndate: ${JSON.stringify(post.date)}\ntags: [${tags}]\npublished: ${post.published}\n${external}---\n\n${post.content.trim()}\n`;
 }
 
 async function localPosts() {

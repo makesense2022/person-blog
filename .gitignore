@@ -3,3 +3,7 @@ node_modules
 .env*
 !.env.example
 *.tsbuildinfo
+.vercel
+.DS_Store
+personal-blog-manus
+personal-blog-manus.zip
