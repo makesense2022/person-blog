@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { execFileSync } from "node:child_process";
 import { readFile, readdir, stat } from "node:fs/promises";
 import path from "node:path";
 import { revalidatePath } from "next/cache";
+import { syncZhihu } from "@/lib/zhihu-sync";
 
 /**
- * 知乎全量同步桥接层:页面 AJAX → 本路由 → scripts/sync-zhihu.mjs → 本机 zhihu-cli。
- * 仅本机开发环境有意义(生产环境的 Vercel 容器里没有 zhihu-cli 二进制),
+ * 知乎全量同步桥接层:页面 AJAX → 本路由 → zhihu-cli → 写入本地内容文件。
+ * 仅本机开发环境有意义(生产环境容器里没有 zhihu-cli 二进制),
  * 因此沿用 /api/posts 的 BLOG_ADMIN_PASSWORD 鉴权规则。
  */
 
@@ -49,15 +49,7 @@ export async function POST(request: NextRequest) {
   if (syncing) return NextResponse.json({ error: "正在同步中，请稍候。" }, { status: 409 });
   syncing = true;
   try {
-    const script = path.join(process.cwd(), "scripts/sync-zhihu.mjs");
-    const out = execFileSync("node", [script], {
-      cwd: process.cwd(),
-      encoding: "utf8",
-      maxBuffer: 50 * 1024 * 1024,
-      timeout: 10 * 60 * 1000,
-    });
-    const lines = out.trim().split("\n").filter(Boolean);
-    const sync = JSON.parse(lines[lines.length - 1] ?? "{}") as Record<string, unknown>;
+    const sync = await syncZhihu();
     revalidatePath("/", "layout");
     return NextResponse.json({ ...(await currentStats()), sync, ok: sync.ok === true });
   } catch (error) {
