@@ -161,6 +161,21 @@ h1 em, h2 em { color: var(--terra); font-style: italic; }
 .editor-bottom button:disabled { opacity: .55; cursor: wait; }
 .editor-status { min-height: 1.6em; margin: 0; color: var(--terra); font-size: 13px; }
 
+/* ---------- 知乎同步 ---------- */
+.zhihu-sync { margin-top: 76px; padding: 34px; background: #fbf9f2; border: 1px solid var(--line-strong); }
+.zhihu-sync h2 { margin: 0 0 12px; color: var(--ink); font-size: 1.6rem; letter-spacing: -.02em; }
+.zhihu-sync-intro { max-width: 700px; margin: 0; color: var(--muted-2); line-height: 1.8; }
+.zhihu-sync-intro code { padding: 2px 6px; background: rgba(0, 0, 0, .05); font-size: .9em; }
+.zhihu-sync-meta { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 20px 0; color: #475044; font-size: 13px; font-weight: 700; }
+.zhihu-sync-actions { display: flex; align-items: end; gap: 15px; }
+.zhihu-sync-actions .password { flex: 1; display: grid; gap: 8px; color: #475044; font-size: 13px; font-weight: 700; }
+.zhihu-sync-actions input { padding: 10px 11px; border: 1px solid #d8d7ce; border-radius: 1px; background: #fffefa; color: var(--ink); outline-color: var(--moss); font-weight: 400; }
+.zhihu-sync-actions button { padding: 11px 18px; border: 0; background: var(--moss); color: #fff; white-space: nowrap; font-weight: 700; cursor: pointer; transition: background 160ms ease-out; }
+.zhihu-sync-actions button:hover { background: var(--ink); }
+.zhihu-sync-actions button:disabled { opacity: .55; cursor: wait; }
+.zhihu-sync-actions button.secondary { background: transparent; border: 1px solid var(--ink); color: var(--ink); }
+.zhihu-sync-actions button.secondary:hover { background: var(--ink); color: var(--cream); }
+
 /* ---------- 页脚 ---------- */
 .site-footer { display: flex; justify-content: space-between; align-items: center; width: min(100% - 96px, 1340px); margin: 0 auto; padding: 19px 0 27px; border-top: 1px solid var(--line-strong); color: #5d756b; font-size: 9px; font-weight: 800; letter-spacing: .09em; }
 .site-footer a { display: inline-flex; align-items: center; gap: 7px; color: var(--ink); }
@@ -214,6 +229,9 @@ h1 em, h2 em { color: var(--terra); font-style: italic; }
   .field-grid { grid-template-columns: 1fr; }
   .editor-bottom { align-items: stretch; flex-direction: column; }
   .editor-bottom button { padding: 13px; }
+  .zhihu-sync { margin-top: 55px; padding: 21px; }
+  .zhihu-sync-actions { align-items: stretch; flex-direction: column; }
+  .zhihu-sync-actions button { padding: 13px; }
   .site-footer { width: min(100% - 40px, 520px); flex-wrap: wrap; gap: 11px; padding-bottom: 22px; }
   .site-footer span:nth-child(2) { display: none; }
 }

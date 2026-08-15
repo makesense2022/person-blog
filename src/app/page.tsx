@@ -12,6 +12,9 @@ export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 type Note = { title: string; date: string; url: string };
 
+// pins.json 保存全部想法,首页笔记流只展示最新 8 条
+const MAX_NOTES = 8;
+
 async function getNotes(): Promise<Note[]> {
   try {
     const raw = await readFile(path.join(process.cwd(), "src/content/pins.json"), "utf8");
@@ -28,6 +31,7 @@ function noteDate(date: string) {
 
 export default async function Home() {
   const [posts, notes] = await Promise.all([getPosts(), getNotes()]);
+  const recentNotes = notes.slice(0, MAX_NOTES);
   const jsonLd = { "@context": "https://schema.org", "@type": "Blog", name: siteName, description: siteDescription, url: getSiteUrl(), inLanguage: "zh-CN" };
   return (
     <main>
@@ -50,7 +54,7 @@ export default async function Home() {
           <h2>近期笔记</h2>
         </div>
         <div className="note-stream">
-          {notes.length ? notes.map((note) => (
+          {recentNotes.length ? recentNotes.map((note) => (
             <a className="note-item" key={note.url} href={note.url} target="_blank" rel="noopener noreferrer">
               <span className="note-date">{noteDate(note.date)}</span>
               <p>{note.title}</p>

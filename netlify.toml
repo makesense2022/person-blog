@@ -1,0 +1,12 @@
+# Netlify 部署配置(OpenNext 适配器,零配置支持 Next.js 16)
+# 关键点: Netlify 运行时默认不带源文件进函数包,
+# 博客在运行时用 fs 读取 src/content/**,必须通过 included_files 打入函数。
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[functions]
+  included_files = ["src/content/**"]
+
+[build.environment]
+  NODE_VERSION = "22"

@@ -36,8 +36,9 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  // suppressHydrationWarning: 浏览器扩展(如注入 data-phaser-debug-url 的调试插件)会在水合前改写 <html> 属性,此处压制这类非代码问题引起的属性级水合警告
   return (
-    <html lang="zh-CN">
+    <html lang="zh-CN" data-scroll-behavior="smooth" suppressHydrationWarning>
       <body className={`${manrope.variable} ${dmSerif.variable}`}>
         <SiteHeader />
         {children}
